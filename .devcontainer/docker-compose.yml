@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  bind9:
+    ports:
+    - '53:53/tcp'
+    - '53:53/udp'
+    image: ubuntu/bind9
+    volumes:
+    - ./dp.mis.lan:/etc/bind/db.mis.lan
+    - ./named.conf.default-zones:/etc/bind/named.conf.default-zones
+    networks:
+      mis.lan:
+        ipv4_address: 172.20.20.10
+  client:
+    image: ubuntu:latest
+    tty: true
+    networks: 
+      mis.lan:
+       ipv4_address: 172.20.20.20
+networks:
+  mis.lan:
+    external: true
+    # docker network create --gateway 172.20.20.1 --subnet 172.20.20.0/24 mis.lan
